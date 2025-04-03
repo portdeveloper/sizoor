@@ -37,7 +37,7 @@ const Home: NextPage = () => {
               rel="noopener noreferrer"
               className="link"
             >
-              the Crazy Contract Mission
+              the Crazy Contract Challenge
             </a>
             !
           </p>
