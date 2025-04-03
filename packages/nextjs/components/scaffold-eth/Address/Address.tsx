@@ -3,8 +3,6 @@
 import { AddressCopyIcon } from "./AddressCopyIcon";
 import { AddressLinkWrapper } from "./AddressLinkWrapper";
 import { Address as AddressType, getAddress, isAddress } from "viem";
-import { normalize } from "viem/ens";
-import { useEnsAvatar, useEnsName } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
@@ -86,27 +84,27 @@ export const Address = ({
 
   const { targetNetwork } = useTargetNetwork();
 
-  const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
-    address: checkSumAddress,
-    chainId: 1,
-    query: {
-      enabled: isAddress(checkSumAddress ?? ""),
-    },
-  });
-  const { data: ensAvatar } = useEnsAvatar({
-    name: ens ? normalize(ens) : undefined,
-    chainId: 1,
-    query: {
-      enabled: Boolean(ens),
-      gcTime: 30_000,
-    },
-  });
+  // const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
+  //   address: checkSumAddress,
+  //   chainId: 1,
+  //   query: {
+  //     enabled: isAddress(checkSumAddress ?? ""),
+  //   },
+  // });
+  // const { data: ensAvatar } = useEnsAvatar({
+  //   name: ens ? normalize(ens) : undefined,
+  //   chainId: 1,
+  //   query: {
+  //     enabled: Boolean(ens),
+  //     gcTime: 30_000,
+  //   },
+  // });
 
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
-  const displayEnsOrAddress = ens || displayAddress;
+  const displayEnsOrAddress = displayAddress;
 
-  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && (ens || isEnsNameLoading));
+  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && false);
 
   const addressSize = showSkeleton && !onlyEnsOrAddress ? getPrevSize(textSizeMap, size, 2) : size;
   const ensSize = getNextSize(textSizeMap, addressSize);
@@ -147,13 +145,13 @@ export const Address = ({
       <div className="flex-shrink-0">
         <BlockieAvatar
           address={checkSumAddress}
-          ensImage={ensAvatar}
+          ensImage={""}
           size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
         />
       </div>
       <div className="flex flex-col">
         {showSkeleton &&
-          (isEnsNameLoading ? (
+          (false ? (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
             </div>
@@ -163,7 +161,7 @@ export const Address = ({
                 disableAddressLink={disableAddressLink}
                 blockExplorerAddressLink={blockExplorerAddressLink}
               >
-                {ens}
+                {displayAddress}
               </AddressLinkWrapper>
             </span>
           ))}
